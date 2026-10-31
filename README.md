@@ -6,14 +6,13 @@ Sistema predictivo de la intención declarada de estudiar en áreas de Informát
 Project Organization
 ------------
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
+    
+    ├── README.md          
     ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
     │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
+    │   └── raw
+            └──         estudio_stem_usuaria.csv
+            └──         libro_de_variables_usuaria-_stem.xlsx
     │
     ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
     │
