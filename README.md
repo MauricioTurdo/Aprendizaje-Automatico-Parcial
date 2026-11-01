@@ -1,56 +1,30 @@
-Aprendizaje Automatico Parcial
-==============================
+# 📊 Análisis Predictivo de Intención Vocacional en Tecnología (IDES-KNAC 2023)
 
-Sistema predictivo de la intención declarada de estudiar en áreas de Informática / Tecnología / Programación / Ciencia de Datos
+Sistema de análisis y modelado predictivo para identificar factores socioeducativos y actitudinales asociados a la intención de estudio en áreas de Tecnología, Programación e Informática en jóvenes argentinos.
 
-Project Organization
-------------
+---
 
-    
-    ├── README.md          
-    ├── data
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw
-            └──         estudio_stem_usuaria.csv
-            └──         libro_de_variables_usuaria-_stem.xlsx
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+## 🎯 Objetivo del Proyecto
 
+El propósito de este trabajo es explorar, preprocesar y construir modelos de clasificación que permitan anticipar la preferencia vocacional por disciplinas tecnológicas a partir de microdatos del relevamiento 2023.
 
---------
+---
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+## 📁 Estructura del Repositorio
+
+El proyecto se organiza de forma modular para garantizar la reproducibilidad y el orden analítico:
+
+```text
+├── data/
+│   ├── raw/                              <- Datos crudos originales del relevamiento
+│   │   ├── estudio_stem_usuaria.csv      <- Dataset principal con microdatos de encuestas
+│   │   └── libro_de_variables_usuaria-_stem.xlsx <- Diccionario de variables del estudio
+│   └── processed/                        <- Datos limpios y preprocesados listos para el modelado
+├── cuadernos/                            <- Libretas de Jupyter / RStudio con el análisis exploratorio y preprocesamiento
+├── documentos/                           <- Informes detallados del proyecto (informe_2.md e informe preliminar)
+├── modelos/                              <- Archivos binarios de modelos entrenados (futuros .pkl / .joblib)
+├── src/                                  <- Scripts auxiliares en Python y funciones reutilizables
+├── .gitignore                            <- Filtros para omitir archivos temporales y datos pesados
+├── LICENCIA                              <- Términos de uso del código (Licencia MIT)
+├── LÉAME.md                              <- Portada del proyecto y guía de navegación
+└── requisitos.txt                        <- Dependencias y librerías necesarias para replicar el entorno
