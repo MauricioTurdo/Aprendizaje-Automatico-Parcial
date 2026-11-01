@@ -38,10 +38,12 @@ Poder anticipar los intereses y preferencias vocacionales de los jóvenes permit
 Desarrollar y evaluar un modelo de Aprendizaje Automático supervisado para predecir la **intención declarada** de jóvenes de 16 a 18 años de escuelas secundarias de estudiar carreras superiores en el área de la **Informática, Tecnología, Programación y Ciencia de Datos**, a partir de sus atributos socioeducativos, rendimiento académico percibido y actitudes hacia la ciencia y la tecnología.
                       
 ### Objetivos Específicos
-1. Analizar, depurar y preprocesar los microdatos de la encuesta nacional (IDES-KNAC, 2023), imputando valores faltantes, codificando variables categóricas y depurando registros ambiguos.
-2. Identificar y seleccionar las variables predictoras clave asociadas con la elección tecnológica, aplicando un control estricto para evitar la fuga de información (*data leakage*).
-3. Implementar y entrenar algoritmos de clasificación supervisada: **Regresión Logística** (como modelo base de referencia), **Árbol de Decisión** (para la extracción de reglas interpretables) y **Random Forest** (para modelar relaciones complejas y no lineales).
-4. Evaluar el rendimiento de los modelos mediante métricas de validación (*Accuracy*, *Precision*, *Recall* y *F1-Score*) contrastándolos frente a una línea base sencilla (*baseline* de clase mayoritaria).
+Objetivos Específicos:
+
+1. Analizar, depurar y preprocesar el conjunto de microdatos de la encuesta nacional (IDES-KNAC, 2023) mediante la imputación de valores faltantes, codificación de variables categóricas (región, género, modalidad escolar, percepciones) y exclusión de registros con ambigüedad vocacional.
+2. Identificar y seleccionar las variables predictoras clave asociadas con la intención de estudiar disciplinas informáticas, garantizando la exclusión rigurosa de variables que generen fuga de información (data leakage).
+3. Implementar y entrenar el algoritmo de clasificación supervisada de Regresión Logística como modelo central del sistema predictivo, aprovechando su alta interpretabilidad directa mediante coeficientes para evaluar el impacto de las características socioeducativas.
+4. Evaluar el rendimiento del modelo utilizando métricas de validación como Accuracy, Precision, Recall y F1-Score, contrastándolo frente a una línea base sencilla (baseline de clase mayoritaria).
                       
 ---
                         
@@ -49,11 +51,12 @@ Desarrollar y evaluar un modelo de Aprendizaje Automático supervisado para pred
                         
 El problema se define como un problema de **Aprendizaje Supervisado de Clasificación Binaria**.
                       
-* **¿Qué predice exactamente el modelo?**  
-Predice la probabilidad de que un estudiante manifieste una **intención declarada** de inclinarse por carreras del sector informático y tecnológico al finalizar la secundaria.
-* **Variable Objetivo ($y$):** Construida a partir de la opción correspondiente en la pregunta **`P13_9`** del estudio IDES-KNAC (2023):
-* **$y = 1$**: El estudiante selecciona expresamente opciones vinculadas a Informática, Tecnología, Programación o Ciencia de Datos.
-* **$y = 0$**: El estudiante no selecciona dicha opción.
+* **¿Qué predice exactamente el modelo?**
+  Predice la probabilidad de que un estudiante de escuela secundaria (16 a 18 años) manifieste una **intención declarada** de elegir una carrera superior vinculada al sector de la Informática, Tecnología, Programación o Ciencia de Datos al finalizar sus estudios.
+* **Variable Objetivo ($y$):**
+  Construida a partir de la opción específica **P13_9** del estudio nacional IDES-KNAC (2023):
+  * **$y = 1$**: El estudiante seleccionó expresamente opciones vinculadas a Informática, Tecnología, Programación o Ciencia de Datos.
+  * **$y = 0$**: El estudiante no seleccionó dicha opción.
                       
 ---
                         
@@ -86,41 +89,41 @@ Antes de alimentar los algoritmos, se aplicó un pipeline de ingeniería de dato
 3. **Codificación Categórica:** Aplicación de `OneHotEncoder` (con `handle_unknown='ignore'`) sobre variables nominales, seguido de un control automatizado de eliminación de columnas duplicadas idénticas para garantizar matrices limpias y perfectamente sincronizadas de 210 características entre `X_train` y `X_test`.
                       
 ---
-                        
-## 7. Modelado Predictivo (Algoritmos Seleccionados)
-                        
-Se implementaron y compararon tres modelos de `scikit-learn`:
-1. **Logistic Regression:** Modelo lineal de referencia (*baseline*) valorado por su alta interpretabilidad a través de los coeficientes de las variables.
-2. **Decision Tree Classifier:** Modelo no lineal basado en particiones jerárquicas, ideal para extraer reglas de decisión transparentes sobre los factores actitudinales de los jóvenes.
-3. **Random Forest Classifier:** Modelo de ensamblaje basado en múltiples árboles de decisión, incorporado para capturar interacciones complejas entre las más de 120 variables predictoras y mitigar el sobreajuste (*overfitting*).
-                      
+
+## 7. Modelado Predictivo (En desarrollo)
+
+Actualmente el proyecto se encuentra en la etapa de preprocesamiento, análisis exploratorio y preparación de los conjuntos de datos. Próximamente se implementará y evaluará el modelo de Regresión Logística como base predictiva inicial.
+
 ---
-                        
-## 8. Estrategia de Evaluación y Línea Base (Baseline)
-                        
-* **Partición de Datos:** Se separó el conjunto en entrenamiento (`X_train`) y prueba (`X_test`), asegurando que los transformadores se ajustaran **exclusivamente** sobre el conjunto de entrenamiento para evitar cualquier fuga de información hacia el conjunto de evaluación.
-* **Métricas de Rendimiento:** Se evaluó mediante *Accuracy*, *Precision*, *Recall* y *F1-Score*, prestando especial atención a las clases desbalanceadas para asegurar la correcta detección de los estudiantes orientados a la tecnología.
-* **Comparación con Baseline:** Los resultados de los modelos de Machine Learning se contrastaron frente a una referencia sencilla (predecir siempre la clase mayoritaria), demostrando el valor analítico real aportado por los algoritmos frente a una regla constante.
-                      
+
+## 8. Estrategia de Evaluación y Línea Base
+
+- **Preparación de Datos:** Se estructuraron microdatos, transformando las variables predictoras necesarias para alimentar los futuros modelos de clasificación.
+- **Criterio de Evaluación:** Se prevé utilizar métricas estándar de clasificación para medir el rendimiento en la predicción de la elección vocacional en tecnología una vez entrenado el modelo.
+
 ---
                         
 ## 9. Resultados e Interpretación
                         
-* Los clasificadores superaron consistentemente la línea base de referencia.
-* El análisis de importancia de características indicó que las variables vinculadas al entorno social, la autopercepción y la curiosidad hacia la tecnología poseen mayor poder discriminante que las variables puramente socioeconómicas tradicionales.
-                      
+- **Expectativa de Rendimiento:** Se evaluará si el modelo predictivo logra superar consistentemente la línea base de referencia establecida.
+- **Análisis Previsto:** Se proyecta analizar los coeficientes de la Regresión Logística para identificar qué variables (como el entorno social, la autopercepción o la curiosidad hacia la tecnología) presentan mayor poder discriminante en la elección vocacional de los jóvenes.                
+
 ---
-                        
+
 ## 10. Conclusiones, Limitaciones y Alcance Válido
-                        
-### Conclusiones que SÍ se pueden sostener:
-* Es estadísticamente posible identificar qué factores socioeducativos y actitudinales se asocian de manera más fuerte con la probabilidad de que un joven manifieste interés por la tecnología y la programación en el marco del estudio de 2023.
-                      
-### Conclusiones que NO se pueden sostener (Limitaciones):
-* **Causalidad:** Encontrar una asociación estadística entre una actitud favorable y la preferencia tecnológica no demuestra una relación causal directa.
-* **Conducta Futura:** El modelo predice una *intención declarada* manifestada en el contexto de una encuesta y no una conducta, elección universitaria definitiva o inserción laboral efectiva a largo plazo (lo cual requeriría un estudio longitudinal posterior).
-* **Extrapolación Temporal y Territorial:** Los patrones hallados reflejan las condiciones del relevamiento de 2023, por lo que no deben trasladarse de manera lineal y automática a otros períodos temporales sin una reevaluación.
-                      
+
+### Conclusiones Alcanzables
+- **Valor exploratorio:** Es posible identificar y cuantificar qué factores socioeducativos y actitudinales se asocian a la intención declarada de elegir carreras o áreas tecnológicas.
+- **Base analítica:** Permite fundamentar decisiones y políticas educativas basadas en datos reales del relevamiento 2023.
+
+### Limitaciones del Estudio
+- **Sesgo de no respuesta en la variable objetivo:** La exclusión o presencia de 505 casos sin respuesta en la variable dependiente reduce la muestra efectiva y exige cautela al generalizar los hallazgos a toda la población encuestada.
+- **Asociación no es causalidad:** Los hallazgos reflejan relaciones estadísticamente significativas, pero no implican un vínculo de causa y efecto directo.
+- **Intención declarada vs. conducta real:** Se evalúa la preferencia manifestada en la encuesta, no la matriculación efectiva ni el desempeño laboral futuro (requeriría un enfoque longitudinal).
+- **Alcance temporal y territorial:** Los patrones corresponden exclusivamente al contexto del relevamiento 2023, por lo que no deben extrapolarse linealmente a otros períodos ni regiones sin revalidación.
+- **Desbalance de clases en la variable objetivo:** La distribución desigual entre las categorías de la variable dependiente puede generar un sesgo en el aprendizaje del modelo, priorizando la clase mayoritaria y requiriendo técnicas de ajuste (como ponderación de clases o métricas específicas orientadas al rendimiento desbalanceado) para evitar interpretaciones erróneas.
+- **Binarización de la variable objetivo:** La necesidad de operacionalizar el interés vocacional en una categoría binaria (Sí/No) simplifica la complejidad del proceso de elección del estudiante, excluyendo matices como el interés parcial o la indecisión.
+
 ---
                         
 ## Referencias
