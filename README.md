@@ -14,7 +14,7 @@ El propósito de este trabajo es explorar, preprocesar y construir modelos de cl
 
 El proyecto se organiza de forma modular para garantizar la reproducibilidad y el orden analítico:
 
-```text
+
 ├── data/
 │   ├── raw/                              <- Datos crudos originales del relevamiento
 │   │   ├── estudio_stem_usuaria.csv      <- Dataset principal con microdatos de encuestas
@@ -28,6 +28,7 @@ El proyecto se organiza de forma modular para garantizar la reproducibilidad y e
 ├── LICENCIA                              <- Términos de uso del código (Licencia MIT)
 ├── LÉAME.md                              <- Portada del proyecto y guía de navegación
 └── requisitos.txt                        <- Dependencias y librerías necesarias para replicar el entorno
+
 
 ## 📊 Población y Estructura del Dataset (`dt_filtrado`)
 
