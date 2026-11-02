@@ -1,7 +1,7 @@
 # Informe Metodológico y Análisis Exploratorio de Datos (Entrega 2)
 
 **Autor:** Mauricio Guillermo Turdo  
-**Fecha:** 30 de octubre de 2026  
+**Fecha:** 02 deNoviembre de 2026  
 
 ## Índice
 1. [Introducción y Objetivos](#1-introducción-y-objetivos)

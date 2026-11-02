@@ -41,9 +41,9 @@ El proyecto se organiza bajo la arquitectura estándar modular para garantizar l
 
 Para el modelado predictivo se aplicó un protocolo de delimitación poblacional, depuración de datos y prevención de fuga de información (*data leakage*).
 
-### 3.1 Delimitación Poblacional y Variable Objetivo ($y$)
+### 3.1 Delimitación Poblacional y Variable Objetivo ("y")
 
-* **Población Analítica Principal ($N = 2.119$):** Partiendo de una base bruta de $2.891$ registros, se aplicó el filtro de intención educativa (`P12`, reteniendo $2.386$ casos) y se excluyeron expresamente $267$ registros con indecisión vocacional declarada (`P13_12 = "No sé aún"`).
+* **Población Analítica Principal:** Partiendo de una base bruta de $2.891$ registros, se aplicó el filtro de intención educativa (`P12`, reteniendo $2.386$ casos) y se excluyeron expresamente $267$ registros con indecisión vocacional declarada (`P13_12 = "No sé aún"`).
 * **Variable Objetivo ($y$):** Intención declarada de elegir la opción de “Informática / Programación / Sistemas”; la etiqueta real es “Informática / Tecnología / Programación / Ciencia de Datos” (`P13_9`)- "Pensás seguir estudiando Informática / Tecnología / Programación / Ciencia de Datos":
   * **$y = 1$:** El encuestado seleccionó expresamente dicha área tecnológica.
   * **$y = 0$:** Optó por otras alternativas vocacionales.
