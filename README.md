@@ -24,6 +24,9 @@ El proyecto se organiza bajo la arquitectura estándar modular para garantizar l
 ├── cuadernos/                            <- Libretas de Jupyter 
 │       └── Notebooks_EDA.ipynb           <-  Jupyter de la EDA 
 ├── documentos/                           <- Informes metodológicos del proyecto (informe_2.md)
+│       └── Entrega 1 Corregida - Aprendizaje Automático - Mauricio Turdo.pdf           <-  Jupyter de la EDA 
+│       └── Informe Descripción del Dataset y Origen.md
+│       └── informe_preliminar_jovenes_stem.md 
 ├── modelos/                              <- Archivos binarios de modelos entrenados (.pkl / .joblib)
 ├── src/                                  <- Scripts auxiliares y funciones reutilizables
 ├── .gitignore                            <- Filtros para omitir archivos temporales
