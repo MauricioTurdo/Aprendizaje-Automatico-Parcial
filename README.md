@@ -17,10 +17,12 @@ El proyecto se organiza bajo la arquitectura estándar modular para garantizar l
 ```text
 ├── data/
 │   ├── raw/                              <- Datos crudos originales y diccionario de variables
-│   │   ├── estudio_stem_usuaria.csv      <- Dataset principal (N = 2.891, 217 variables)
+│   │   ├── estudio_stem_usuaria.csv      <- Dataset principal Crudo
 │   │   └── libro_de_variables_usuaria-_stem.xlsx <- Diccionario oficial de variables
 │   └── processed/                        <- Datos limpios y preprocesados listos para el modelado
-├── cuadernos/                            <- Libretas de Jupyter con análisis exploratorio y preprocesamiento
+│       └── dataset_filtrado.csv          <- Dataset Limpio 
+├── cuadernos/                            <- Libretas de Jupyter 
+│       └── Notebooks_EDA.ipynb           <-  Jupyter de la EDA 
 ├── documentos/                           <- Informes metodológicos del proyecto (informe_2.md)
 ├── modelos/                              <- Archivos binarios de modelos entrenados (.pkl / .joblib)
 ├── src/                                  <- Scripts auxiliares y funciones reutilizables
@@ -39,7 +41,7 @@ Para el modelado predictivo se aplicó un protocolo de delimitación poblacional
 ### 3.1 Delimitación Poblacional y Variable Objetivo ($y$)
 
 * **Población Analítica Principal ($N = 2.119$):** Partiendo de una base bruta de $2.891$ registros, se aplicó el filtro de intención educativa (`P12`, reteniendo $2.386$ casos) y se excluyeron expresamente $267$ registros con indecisión vocacional declarada (`P13_12 = "No sé aún"`).
-* **Variable Objetivo ($y$):** Intención declarada de elegir la opción de Informática / Programación / Sistemas (`P13_9`):
+* **Variable Objetivo ($y$):** Intención declarada de elegir la opción de Informática / Programación / Sistemas (`P13_9`)- "Pensás seguir estudiando Informática / Tecnología / Programación / Ciencia de Datos":
   * **$y = 1$:** El encuestado seleccionó expresamente dicha área tecnológica.
   * **$y = 0$:** Optó por otras alternativas vocacionales.
 

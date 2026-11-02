@@ -41,7 +41,7 @@ El flujo de depuración y filtrado poblacional se compone de las siguientes etap
 
 ## 4. Definición de la Variable Objetivo
 
-La variable objetivo ($y$) modela la intención declarada de estudiar una carrera vinculada con Informática, Tecnología, Programación o Ciencia de Datos, derivada de la opción `P13_9`:
+La variable objetivo ($y$) modela la intención declarada de estudiar una carrera vinculada con Informática, Tecnología, Programación o Ciencia de Datos, derivada de la opción `P13_9 - "Pensás seguir estudiando Informática / Tecnología / Programación / Ciencia de Datos"`:
 * **$y = 1$**: El encuestado seleccionó expresamente Informática, Tecnología, Programación o Ciencia de Datos.
 * **$y = 0$**: El encuestado no seleccionó dicha opción (lo cual no implica una negativa absoluta hacia la tecnología, sino la elección de otros campos o rumbos alternativos).
 
@@ -95,5 +95,5 @@ Los parámetros de imputación y transformación se calcularon exclusivamente so
 ## 9. Limitaciones Metodológicas y Consideraciones Éticas
 
 * **Naturaleza de la Muestra:** Se trata de una **muestra no probabilística por cuotas relevada mediante un canal online**, lo cual restringe la inferencia estadística estricta hacia la totalidad de la población nacional de jóvenes.
-* **Tratamiento de Exclusiones:** La exclusión de los $505$ registros responde al diseño condicional del instrumento (`P12`), mientras que la separación de los $267$ casos indecisos evita ruidos de clasificación en la frontera de decisión.
+* **Tratamiento de Exclusiones:** La exclusión de los  $505$  registros responde al diseño condicional del instrumento (`P12`)- ¿Pensás continuar tus estudios al terminar la escuela?, mientras que la separación de los $267$ casos indecisos evita ruidos de clasificación en la frontera de decisión.
 * **Consideraciones Éticas:** El tratamiento de los microdatos cumple con los estándares de anonimización y preservación de la privacidad establecidos para la investigación social y educativa.
