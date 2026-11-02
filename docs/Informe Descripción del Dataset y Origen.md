@@ -1,5 +1,8 @@
 # Informe Metodológico y Análisis Exploratorio de Datos (Entrega 2)
 
+**Autor:** Mauricio Guillermo Turdo  
+**Fecha:** 30 de octubre de 2026  
+
 ## Índice
 1. [Introducción y Objetivos](#1-introducción-y-objetivos)
 2. [Descripción del Dataset y Origen](#2-descripción-del-dataset-y-origen)
@@ -21,20 +24,20 @@ El presente documento detalla la segunda etapa del proyecto orientada al anális
 
 ## 2. Descripción del Dataset y Origen
 
-* **Fuente y Origen:** El estudio proviene de la base de datos pública generada por el IDES en el marco del relevamiento KNAC para el MINCyT (año 2023). La recolección se efectuó mediante un cuestionario estructurado administrado a través de canales digitales (*online*).
-* **Dimensiones Brutas:** El archivo original contiene **$2.891$ observaciones y $217$ variables** (cifra que difiere levemente de los $2.880$ registros teóricos reportados en la ficha técnica preliminar debido a la estructura de exportación del archivo CSV bruto).
-* **Tipos de Datos:** El conjunto comprende variables de naturaleza numérica, ordinal, nominal y binaria, abarcando dimensiones sociodemográficas, trayectorias escolares, rendimiento académico autoimpulsado e intereses profesionales.
-* **Condiciones de Uso:** Datos de acceso público para fines de investigación académica y desarrollo científico bajo normativas de anonimización.
+- **Fuente y Origen:** El estudio proviene de la base de datos pública generada por el **consorcio IDES-KNAC** en el marco del relevamiento para el MINCyT. El relevamiento de campo se llevó a cabo entre el **17 de julio y el 19 de agosto de 2023**, y el archivo de microdatos fue adquirido y descargado el **15 de octubre de 2026** desde los repositorios de datos abiertos oficiales (`datos.gob.ar`).
+- **Dimensiones Brutas:** El archivo original contiene **$2.891$ observaciones y $217$ variables**. La diferencia numérica frente a los $2.880$ registros teóricos reportados en la ficha técnica preliminar **no se encuentra explicada** en la documentación oficial provista por la fuente.
+- **Tipos de Datos:** El conjunto comprende variables de naturaleza numérica, ordinal, nominal y binaria, abarcando dimensiones sociodemográficas, trayectorias escolares, rendimiento académico **autopercibido** e intereses profesionales.
+- **Condiciones de Uso:** Se trabaja con los microdatos anonimizados publicados por la fuente oficial, cumpliendo con los requerimientos de **reconocimiento de autoría al consorcio IDES-KNAC y comunicación previa por escrito** a los organismos emisores ante la difusión de estudios derivados.
 
 ---
 
 ## 3. Delimitación Poblacional y Flujo de Procesamiento
 
-El universo bajo estudio abarca a **jóvenes de 16 a 18 años independientemente de su situación escolar actual** (contemplando tanto a quienes cursan la escuela secundaria como a quienes ya la han finalizado). 
+El universo bajo estudio abarca a **jóvenes de 16 a 18 años** del ciclo orientado de nivel secundario. 
 
 El flujo de depuración y filtrado poblacional se compone de las siguientes etapas:
 1. **Población Bruta Inicial:** $2.891$ registros.
-2. **Filtro de Intención Educativa (`P12` - *"¿Pensás continuar tus estudios al terminar la escuela?"*):** Se excluyen **$505$ registros** que respondieron de manera negativa o no aplicable, reteniendo a **$2.386$ registros** orientados a continuar estudios superiores.
+2. **Filtro de Intención Educativa (`P12`):** Se excluyen **$505$ registros** (compuestos por $408$ indecisos de estado escolar, $68$ respuestas negativas y $29$ sin respuesta), reteniendo a **$2.386$ registros** de estudiantes secundarios activos. *(Nota: Se observa un sesgo de exclusión donde el $61,8\%$ de los casos descartados son varones frente al $37,7\%$ de mujeres).*
 3. **Filtro de Indecisión Vocacional (`P13_12` - *"No sé aún"*):** Se excluyen **$267$ registros** que manifestaron indecisión absoluta, aislando un conjunto analítico principal de **$2.119$ registros** con orientaciones vocacionales definidas.
 
 ---
@@ -42,58 +45,57 @@ El flujo de depuración y filtrado poblacional se compone de las siguientes etap
 ## 4. Definición de la Variable Objetivo
 
 La variable objetivo ($y$) modela la intención declarada de estudiar una carrera vinculada con Informática, Tecnología, Programación o Ciencia de Datos, derivada de la opción `P13_9 - "Pensás seguir estudiando Informática / Tecnología / Programación / Ciencia de Datos"`:
-* **$y = 1$**: El encuestado seleccionó expresamente Informática, Tecnología, Programación o Ciencia de Datos.
-* **$y = 0$**: El encuestado no seleccionó dicha opción (lo cual no implica una negativa absoluta hacia la tecnología, sino la elección de otros campos o rumbos alternativos).
-
-Los $267$ casos con respuestas ambiguas o de indecisión absoluta fueron excluidos del subconjunto de entrenamiento y validación para evitar sesgos de estimación.
+- **$y = 1$**: El encuestado seleccionó expresamente dicha opción.
+- **$y = 0$**: El encuestado no seleccionó dicha opción (elección de otros campos o rumbos alternativos).
 
 ---
 
 ## 5. Variables Predictoras y Contexto de Relevamiento
 
-El modelo integra un conjunto de **$208$ variables predictoras finales** tras el preprocesamiento. La información recolectada abarca un espectro amplio de factores sociodemográficos, disponibilidad de recursos tecnológicos en el hogar, rendimiento académico autopercibido, orientación del bachillerato cursado e intereses vocacionales explícitos (`P3_d`). 
+El modelo integra un conjunto de **$125$ variables de entrada** que se expanden a **$208$ columnas predictoras finales** tras la codificación *One-Hot*. La información recolectada abarca factores sociodemográficos, recursos tecnológicos, rendimiento autopercibido e intereses vocacionales. 
 
-Se destaca que no se excluyeron a priori variables por considerarse metadatos restringidos; cada rasgo incorporado aporta información contextual relevante para el perfilamiento del postulante.
+Para garantizar una matriz libre de fuga de información (*data leakage*), **se excluyeron explícitamente $15$ variables** de la matriz de predictores: los identificadores y ponderadores (`ID`, `POND_SIN_ELEVAR`), el filtro poblacional (`P12`), las opciones simultáneas de intención vocacional (`P13_1` a `P13_8`, `P13_10`, `P13_11`), variables de decisiones posteriores o temporales (`P15`, `P16`, `P18`, `P39`, `P33b`, `P33c`), la variable `P25` por superar el $82\%$ de nulos, y `P21` por colinealidad.  
+*Advertencia:* La variable **`P3_d`** presenta una proximidad conceptual muy elevada con el objetivo a predecir, por lo que su peso e impacto serán monitoreados estrictamente en el análisis de importancia de características.
 
 ---
 
 ## 6. Diagnóstico de Valores Faltantes y Estrategia de Imputación
 
-Del diagnóstico inicial se identificaron 17 variables con valores nulos. Cabe destacar el caso de la variable **`P25`**, la cual presentó $1.746$ valores faltantes ($82,40\%$), motivo por el cual **se excluyó explícitamente** del pipeline.
+Del diagnóstico inicial se identificaron 17 variables con valores nulos, destacándose la exclusión formal de **`P25`** por presentar $1.746$ valores faltantes ($82,40\%$).
 
-Para garantizar la integridad y evitar el sesgo por pérdida de información, se definieron estrategias de imputación específicas dentro del pipeline:
-* **Variables numéricas y ordinales:** Imputación mediante la **mediana**, seguida de estandarización.
-* **Variables binarias:** Imputación mediante la categoría más frecuente (**moda**).
-* **Variables nominales:** Imputación mediante una **constante fija (`0`)**, la cual representa metodológicamente la categoría estructural *"no corresponde"*.
-* **Indicadores de códigos especiales:** Creación de *flags* binarias explícitas (`no_tiene_*` y `no_sabe_*`) para capturar patrones de omisión estructural o incertidumbre informativa.
+Para garantizar la integridad y evitar el sesgo por pérdida de información, se definieron estrategias específicas dentro del pipeline:
+- **Variables numéricas y ordinales:** Imputación mediante la **mediana**.
+- **Variables binarias:** Imputación mediante la categoría más frecuente (**moda**).
+- **Variables nominales:** Imputación mediante una **constante fija (`0`)**.
+- **Indicadores de códigos especiales:** Creación de *flags* binarias explícitas (`no_tiene_*` y `no_sabe_*`) para capturar patrones de omisión estructural.
 
 ---
 
 ## 7. Preprocesamiento y Transformación de Características
 
-El preprocesamiento se ejecutó mediante un pipeline estructurado sobre las **$125$ variables predictoras de entrada** (excluyendo `P25` y `P21`), generando el siguiente desglose de transformaciones:
-* **31 variables ordinales:** Imputación por mediana y estandarización.
-* **21 variables nominales:** Imputación por constante fija (`0`) y codificación *One-Hot*.
-* **3 variables numéricas:** Imputación por mediana y estandarización.
-* **60 variables binarias originales:** Recodificación e imputación por moda.
-* **10 indicadores de códigos especiales:** *Flags* binarias para preservar patrones de omisión.
+El preprocesamiento estructurado sobre las variables predictoras de entrada se distribuye de la siguiente forma:
+- **Variables ordinales:** Imputación por mediana y estandarización.
+- **20 variables nominales:** Imputación por constante y codificación *One-Hot*.
+- **Variables numéricas:** Imputación por mediana y estandarización.
+- **Variables binarias originales:** Recodificación e imputación por moda.
+- **11 indicadores de códigos especiales:** *Flags* binarias para preservar patrones de omisión.
 
-Como resultado de la codificación *One-Hot* y la integración de transformaciones, la matriz final quedó conformada por **$208$ columnas predictoras**.
+Como resultado de la codificación y transformación, la matriz final quedó conformada por **$208$ columnas predictoras**.
 
 ---
 
 ## 8. Exportación y Preparación para el Modelado
 
-Los datos procesados se dividieron en conjuntos disjuntos para evitar el sesgo de fuga de información (*data leakage*):
-* **Conjunto de Entrenamiento (`X_train`):** $1.695$ registros.
-* **Conjunto de Prueba (`X_test`):** $424$ registros.
+Los datos procesados se dividieron en conjuntos disjuntos para evitar sesgos:
+- **Conjunto de Entrenamiento (`X_train`):** $1.695$ registros.
+- **Conjunto de Prueba (`X_test`):** $424$ registros.
 
-Los parámetros de imputación y transformación se calcularon exclusivamente sobre `X_train` y se proyectaron idénticamente sobre `X_test`. Finalmente, la matriz depurada se exportó bajo el archivo `dataset_filtrado_y_metadatos.csv`.
+Los parámetros de imputación y transformación se calcularon exclusivamente sobre `X_train` y se proyectaron sobre `X_test`.
 
 ---
 
 ## 9. Limitaciones Metodológicas y Consideraciones Éticas
 
-* **Naturaleza de la Muestra:** Se trata de una **muestra no probabilística por cuotas relevada mediante un canal online**, lo cual restringe la inferencia estadística estricta hacia la totalidad de la población nacional de jóvenes.
-* **Tratamiento de Exclusiones:** La exclusión de los  $505$  registros responde al diseño condicional del instrumento (`P12`)- ¿Pensás continuar tus estudios al terminar la escuela?, mientras que la separación de los $267$ casos indecisos evita ruidos de clasificación en la frontera de decisión.
-* **Consideraciones Éticas:** El tratamiento de los microdatos cumple con los estándares de anonimización y preservación de la privacidad establecidos para la investigación social y educativa.
+- **Naturaleza de la Muestra:** Se trata de una muestra obtenida mediante un relevamiento estructurado del consorcio IDES-KNAC, sujeta a las condiciones y limitaciones propias del diseño muestral estratificado por regiones COFECYT.
+- **Tratamiento de Exclusiones:** La depuración de los $505$ registros responde al cumplimiento de los criterios de inclusión escolar (`P12`), mientras que la separación de los $267$ casos indecisos evita ruidos de clasificación en la frontera de decisión.
+- **Consideraciones Éticas:** El análisis se realiza estrictamente sobre los microdatos anonimizados provistos por la fuente oficial para fines de investigación académica.
