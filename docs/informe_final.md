@@ -44,7 +44,7 @@ Es un problema de **clasificación binaria supervisada**: el modelo aprende de j
 | Campo | Detalle |
 |---|---|
 | Fuente | Encuesta "Actitud de los jóvenes hacia las profesiones STEM", consorcio IDES-KNAC para el MINCyT |
-| Descarga | Portal argentina.gob.ar (CSV). Descargada el 3 de octubre de 2026. |
+| Descarga | Portal argentina.gob.ar: [microdatos (CSV)](https://www.argentina.gob.ar/sites/default/files/estudio_stem_usuaria.csv) · [libro de variables](https://www.argentina.gob.ar/sites/default/files/libro_de_variables_usuaria-_stem.xlsx) · [informe preliminar](https://www.argentina.gob.ar/sites/default/files/informe_preliminar_jovenes_stem.pdf). Descargados el 3 de octubre de 2026. |
 | Período | 17 de julio al 19 de agosto de 2023 |
 | Muestra | Encuesta online, no probabilística, por cuotas por región: los resultados valen para esta muestra, no para todos los jóvenes del país |
 | Tamaño | 2.891 filas y 217 columnas (la ficha técnica indica 2.880; la diferencia no está explicada en la documentación) |
@@ -108,6 +108,22 @@ Es un problema de **clasificación binaria supervisada**: el modelo aprende de j
 *Figura 1. Datos de entrenamiento: clases, sexo e interés en cursos de programación o robótica (`P3_d`).*
 
 **Conclusiones del EDA:** el interés previo en programación y el sexo son las diferencias más marcadas. Como hay desbalance, la exactitud sola no alcanza y se usan también precisión, recall, F1 y ROC-AUC. Una correlación alta no prueba fuga: el interés en cursos de programación o robótica, la orientación del colegio y la participación en talleres y tutorías miden interés o experiencia previa que se conoce antes de elegir carrera, así que se conservan, aunque están muy cerca del objetivo.
+
+### Revisión de variables cercanas al objetivo
+
+Se revisó que ninguna variable repita la respuesta que se quiere predecir. Se separaron las actitudes y preferencias generales de las preguntas que se acercan más a la misma elección:
+
+| Variable | Qué expresa | Grupo |
+|---|---|---|
+| Interés en hacer cursos de programación o robótica (`P3_d`) | Interés en una actividad de informática | Cercana |
+| Que guste la materia Informática / computación (`P5_d`) | Gusto por una materia | Cercana |
+| Considerar que Computación / Informática / Tecnología "me sirve para mi futuro laboral" (`P8_3_f`) | Opinión sobre la materia | Cercana |
+| Haber participado o querer participar en talleres de robótica / programación (`P11_a`) y en tutorías para olimpíadas de informática (`P11_d`) | Experiencia o intención de participar | Cercana |
+| Uso del tiempo, gusto, valoración y notas de las demás materias, cómo describe las materias y a los docentes, recursos usados en clase, cómo describe a las personas de ciencia y tecnología, datos personales y del hogar | Actitudes generales y contexto | General |
+
+Ninguna de las cercanas es la misma pregunta que el objetivo: expresan interés o experiencia previa, no la elección de qué estudiar. Las preguntas que sí expresan esa elección ya estaban fuera: las demás opciones de qué estudiar y los motivos de elegir o no una carrera, que se responden según lo que el joven marcó. Ninguna variable reproduce sola la respuesta: la que mejor separa (`P3_d`) tiene un ROC-AUC de 0,77 en el entrenamiento.
+
+**Prueba de sensibilidad:** se quitaron las cinco variables cercanas y se volvió a entrenar con los mismos hiperparámetros y el umbral 0,50. En la prueba el modelo da precisión 0,40, recall 0,64, F1 0,49 y ROC-AUC 0,79 (con todas las variables: 0,49, 0,68, 0,57 y 0,85). Pierde capacidad, pero sigue ordenando mucho mejor que el azar, así que no depende solo de esas variables.
 
 ## 5. Modelo
 
@@ -181,7 +197,7 @@ La figura 5 muestra las 8 variables que más aumentan y las 8 que más reducen l
 
 La regresión logística permite detectar a casi 7 de cada 10 jóvenes interesados, pero con muchas falsas alarmas. Sirve como un primer filtro para ordenar a los jóvenes por probabilidad de interés y decidir dónde orientar recursos, no para decidir sobre una persona. No predice qué carrera estudiará un joven, solo su intención declarada, y no se aplica a los indecisos.
 
-**Trabajo futuro:** probar el modelo sin las variables más cercanas al objetivo (interés en cursos de programación o robótica, que guste Informática, considerar útil Computación / Informática / Tecnología para el futuro laboral y participación en talleres y tutorías), comparar con otros algoritmos (árbol de decisión, Random Forest), evaluar con validación cruzada completa y definir con quien use el modelo cuántas falsas alarmas se pueden aceptar.
+**Trabajo futuro:** comparar con otros algoritmos (árbol de decisión, Random Forest), evaluar con validación cruzada completa y definir con quien use el modelo cuántas falsas alarmas se pueden aceptar.
 
 ### Aporte del trabajo
 
@@ -201,7 +217,8 @@ El repositorio sigue la estructura Cookiecutter Data Science: `data/raw` (CSV or
 
 ## 11. Referencias
 
-- IDES-KNAC / MINCyT (2023). Encuesta "Actitud de los jóvenes hacia las profesiones STEM" (base de microdatos y libro de variables). Portal argentina.gob.ar.
+- IDES-KNAC / MINCyT (2023). Encuesta "Actitud de los jóvenes hacia las profesiones STEM". [Microdatos (CSV)](https://www.argentina.gob.ar/sites/default/files/estudio_stem_usuaria.csv) y [libro de variables](https://www.argentina.gob.ar/sites/default/files/libro_de_variables_usuaria-_stem.xlsx). Portal argentina.gob.ar.
+- IDES-KNAC / MINCyT (2024). [Actitud de los jóvenes hacia las profesiones STEM. Informe preliminar](https://www.argentina.gob.ar/sites/default/files/informe_preliminar_jovenes_stem.pdf).
 - Pedregosa et al. (2011). Scikit-learn: Machine Learning in Python. Journal of Machine Learning Research, 12, 2825–2830.
 
 ## Anexo. Variable objetivo y variables de entrada

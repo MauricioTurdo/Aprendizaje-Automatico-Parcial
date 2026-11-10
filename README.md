@@ -52,6 +52,24 @@ El proyecto se organiza bajo la arquitectura estándar de Cookiecutter Data Scie
 
 ---
 
+### 2.1 Carga de los Datos
+
+**Origen:** el dataset original es la base de microdatos de la encuesta "Actitud de los jóvenes hacia las profesiones STEM" (IDES-KNAC para el MINCyT, 2023), publicada en el portal argentina.gob.ar. Se descargó el 3 de octubre de 2026 ([microdatos CSV](https://www.argentina.gob.ar/sites/default/files/estudio_stem_usuaria.csv), [libro de variables](https://www.argentina.gob.ar/sites/default/files/libro_de_variables_usuaria-_stem.xlsx) e [informe preliminar](https://www.argentina.gob.ar/sites/default/files/informe_preliminar_jovenes_stem.pdf)) y se guardó **sin modificar** en `data/raw/estudio_stem_usuaria.csv` ($2.891$ filas y $217$ columnas). No hace falta descargar nada: el archivo ya está en el repositorio.
+
+**Cómo se cargan los datos:**
+
+| Notebook | Lee | Escribe |
+| :--- | :--- | :--- |
+| `01_EDA.ipynb` | `data/raw/estudio_stem_usuaria.csv` (con `pd.read_csv`) | `data/interim/` (`X_train.csv`, `X_test.csv`) y `data/processed/` (`X_train_prep.csv`, `X_test_prep.csv`, `y_train.csv`, `y_test.csv`) |
+| `02_Modelado_regresion_logistica.ipynb` | `data/interim/` y `data/processed/` | `models/regresion_logistica.joblib` |
+
+* Los notebooks usan **rutas relativas** a la raíz del proyecto, por lo que funcionan al abrirlos desde `notebooks/` sin cambiar nada. Si se ejecutan en Google Colab, buscan los archivos en `/content/`.
+* **Flujo de los datos:** `data/raw` → `01_EDA.ipynb` → `data/interim` y `data/processed` → `02_Modelado_regresion_logistica.ipynb` → `models/`.
+* `data/raw` guarda el original y nunca se modifica. `data/interim` tiene los datos de entrada del modelo (las $125$ variables, sin imputar, escalar ni codificar) y `data/processed` las matrices ya preparadas.
+* Los significados de cada columna y de sus códigos están en `data/raw/libro_de_variables_usuaria-_stem.xlsx`.
+
+---
+
 ## 3. Población y Estructura del Dataset
 
 Para el modelado predictivo se aplicó un protocolo de delimitación poblacional, depuración de datos y prevención de fuga de información (*data leakage*).
@@ -87,6 +105,7 @@ Para garantizar la capacidad de generalización del modelo ante datos no observa
 1. **Identificadores y Ponderadores:** `ID`, `POND_SIN_ELEVAR` (reservados exclusivamente para análisis descriptivos ponderados).
 2. **Variables con exceso de nulos:** `P25` (excluida por presentar más del $81\%$ de valores faltantes) y `P21` (más del $65\%$).
 3. **Variables de Intención Simultánea:** Opciones excluyentes de `P13` (distintas de `P13_9`) y variables de postulación o control posterior (`P15a`, `P16`, `P18`), que dependen de la respuesta, evitando alterar la temporalidad predictiva.
+4. **Revisión de variables cercanas al objetivo:** no hay ninguna pregunta que exprese la misma elección que se predice (las demás opciones de `P13` y los motivos ya están excluidos). Las más cercanas son actitudes o experiencia previa en informática: `P3_d` (interés en cursos de programación o robótica), `P5_d` (gusto por Informática), `P8_3_f` (considerar útil Computación / Informática / Tecnología para el futuro laboral), `P11_a` y `P11_d` (talleres de robótica / programación y tutorías de olimpíadas de informática). Se conservan; al quitarlas y volver a entrenar, el ROC-AUC en la prueba baja de $0,85$ a $0,79$, por lo que el modelo no depende solo de ellas. El detalle está en `docs/informe_final.md`.
 
 > *Nota: La documentación detallada de cada código, escala Likert y valor codificado se encuentra disponible en el archivo complementario [`libro_de_variables_usuaria-_stem.xlsx`](./data/raw/libro_de_variables_usuaria-_stem.xlsx).*
 
@@ -140,11 +159,21 @@ La regresión logística detecta a casi $7$ de cada $10$ jóvenes interesados, p
 
 ## 7. Cómo Reproducir
 
+1. Descargar el repositorio:
+```bash
+git clone https://github.com/MauricioTurdo/Aprendizaje-Automatico-Parcial.git
+cd Aprendizaje-Automatico-Parcial
+```
+2. Instalar las librerías (requiere Python 3):
 ```bash
 pip install -r requirements.txt
 ```
+3. Abrir Jupyter y ejecutar en orden, con "Run All", `notebooks/01_EDA.ipynb` y luego `notebooks/02_Modelado_regresion_logistica.ipynb`:
+```bash
+jupyter notebook
+```
 
-Ejecutar en orden `notebooks/01_EDA.ipynb` y `notebooks/02_Modelado_regresion_logistica.ipynb`, con rutas relativas desde `notebooks/`.
+Los datos originales ya están en `data/raw/`, así que no hace falta descargar nada más.
 
 ---
 
