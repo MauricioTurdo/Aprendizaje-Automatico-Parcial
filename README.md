@@ -1,6 +1,6 @@
-# Análisis Predictivo de Intención Vocacional en Tecnología (IDES-KNAC 2023)
+# Predicción del interés en Informática, Tecnología, Programación o Ciencia de Datos (IDES-KNAC 2023)
 
-Sistema de análisis y modelado predictivo para identificar factores socioeducativos y actitudinales asociados a la elección de carreras en áreas de Tecnología, Programación e Informática en jóvenes argentinos.
+Modelo de regresión logística para predecir si un joven argentino de 16 a 18 años declara que piensa estudiar Informática, Tecnología, Programación o Ciencia de Datos, e identificar qué factores socioeducativos y actitudinales se asocian con ese interés.
 
 ---
 
