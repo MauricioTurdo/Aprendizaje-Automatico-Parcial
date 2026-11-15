@@ -52,7 +52,7 @@ Es un problema de **clasificación binaria supervisada**: el modelo aprende de j
 
 ## 3. Población, objetivo y preparación de los datos
 
-- **Población:** de los 2.891 encuestados, 2.386 respondieron que piensan seguir estudiando al terminar la escuela ("Sí, pienso seguir estudiando" o "Sí, ya arranqué un terciario o una carrera universitaria"), cursen o no el secundario (83 % asiste, 4,3 % dejó por un tiempo y 12,7 % lo terminó). Se excluyeron 267 que respondieron "No sé aún" cuando se les preguntó qué piensan estudiar, para simplificar el trabajo, y quedan **2.119**. Los resultados no se pueden generalizar a los indecisos. El recorte no es neutro: entre los 505 que no piensan seguir estudiando o no saben todavía hay más varones (61,8 % frente a 37,7 %).
+- **Población:** de los 2.891 encuestados, 2.386 respondieron que piensan seguir estudiando al terminar la escuela ("Sí, pienso seguir estudiando" o "Sí, ya arranqué un terciario o una carrera universitaria"), cursen o no el secundario (83 % asiste, 4,3 % dejó por un tiempo y 12,7 % lo terminó). Se excluyeron 267 que respondieron "No sé aún" cuando se les preguntó qué piensan estudiar, porque no dijeron ni que sí ni que no, y quedan **2.119**. Los resultados no se pueden generalizar a los indecisos. El recorte no es neutro: entre los 505 que no piensan seguir estudiando o no saben todavía hay más varones (61,8 % frente a 37,7 %).
 - **Variable objetivo (`y`):** `y = 1` si el joven marcó la opción "Pensás seguir estudiando Informática / Tecnología / Programación / Ciencia de Datos" y `y = 0` si no, lo que no significa que la rechace. Es la intención declarada, no la carrera que estudiará. Hay 359 "Sí" (16,9 %) y 1.760 "No".
 - **Variables excluidas (101 columnas):** el identificador y el ponderador; las preguntas de filtro y las demás opciones de qué estudiar; las preguntas sobre los motivos de elegir o no una carrera científica o tecnológica y de no seguir estudiando, que dependen de la respuesta (por ejemplo, los motivos de elegir Informática los responden todos los "Sí" y ningún "No"); si tiene hijos y cuántos; y dos preguntas poco claras sobre los integrantes del hogar de 18 años o más. Se descartaron además "último año cursado del secundario" y "si la persona que conoce en ciencia o tecnología es de su familia" por tener muchos vacíos.
 - **Códigos especiales y vacíos:** "no tengo la materia" (Informática, Biología y Física / Química) y "No sé" (nivel educativo del principal sostén del hogar y de la madre) se pasan a 11 indicadores 0/1. En el tipo de relación con la persona que conoce en ciencia o tecnología y en el año que cursa, el vacío significa "no corresponde". En habitaciones para dormir, los 5 valores de 15 o más, imposibles, pasan a vacío.
@@ -121,9 +121,9 @@ Se revisó que ninguna variable repita la respuesta que se quiere predecir. Se s
 | Haber participado o querer participar en talleres de robótica / programación (`P11_a`) y en tutorías para olimpíadas de informática (`P11_d`) | Experiencia o intención de participar | Cercana |
 | Uso del tiempo, gusto, valoración y notas de las demás materias, cómo describe las materias y a los docentes, recursos usados en clase, cómo describe a las personas de ciencia y tecnología, datos personales y del hogar | Actitudes generales y contexto | General |
 
-Ninguna de las cercanas es la misma pregunta que el objetivo: expresan interés o experiencia previa, no la elección de qué estudiar. Las preguntas que sí expresan esa elección ya estaban fuera: las demás opciones de qué estudiar y los motivos de elegir o no una carrera, que se responden según lo que el joven marcó. Ninguna variable reproduce sola la respuesta: la que mejor separa (`P3_d`) tiene un ROC-AUC de 0,77 en el entrenamiento.
+Ninguna de las cercanas es la misma pregunta que el objetivo: expresan interés o experiencia previa, no la elección de qué estudiar. Las preguntas que sí expresan esa elección ya estaban fuera: las demás opciones de qué estudiar y los motivos de elegir o no una carrera, que se responden según lo que el joven marcó.
 
-**Prueba de sensibilidad:** se quitaron las cinco variables cercanas y se volvió a entrenar con los mismos hiperparámetros y el umbral 0,50. En la prueba el modelo da precisión 0,40, recall 0,64, F1 0,49 y ROC-AUC 0,79 (con todas las variables: 0,49, 0,68, 0,57 y 0,85). Pierde capacidad, pero sigue ordenando mucho mejor que el azar, así que no depende solo de esas variables.
+**Límite de esta revisión:** no se probó el modelo sin estas cinco variables, por lo que no se sabe cuánto de su capacidad depende de ellas.
 
 ## 5. Modelo
 
@@ -163,7 +163,7 @@ Evaluación en la prueba (424 jóvenes: 72 "Sí" y 352 "No"):
 
 *Figura 4. Matriz de confusión del modelo elegido en la prueba (umbral 0,50).*
 
-- **Interpretación:** con umbral 0,50 el modelo detecta 49 de los 72 interesados y hace 52 falsas alarmas (precisión 0,49: casi la mitad de sus "Sí" son falsas alarmas). El ROC-AUC es 0,85: ante un joven con "Sí" y otro con "No", le asigna más probabilidad al "Sí" en 85 de cada 100 casos (0,5 sería azar).
+- **Interpretación:** con umbral 0,50 el modelo detecta 49 de los 72 interesados y hace 52 falsas alarmas (precisión 0,49: algo más de la mitad de sus "Sí" son falsas alarmas). El ROC-AUC es 0,85: ante un joven con "Sí" y otro con "No", le asigna más probabilidad al "Sí" en 85 de cada 100 casos (0,5 sería azar).
 - **Frente al modelo por defecto:** detecta casi 7 de cada 10 interesados en lugar de 4 de cada 10, y mejora el F1 y el ROC-AUC (0,826 a 0,853). Pierde exactitud porque hace más falsas alarmas.
 - **Umbral:** con 0,50 se detectan 11 interesados más que con 0,65 (49 frente a 38), a cambio de 29 falsas alarmas más (52 frente a 23).
 - **Aclaración:** en el entrenamiento el umbral 0,50 dio un recall de 0,76 y en la prueba dio 0,68, algo por debajo del 0,70 pedido. Son jóvenes distintos y la prueba tiene solo 72 interesados, así que el recall varía bastante entre grupos. El umbral no se reajustó con la prueba.
@@ -195,9 +195,9 @@ La figura 5 muestra las 8 variables que más aumentan y las 8 que más reducen l
 
 ## 8. Conclusiones
 
-La regresión logística permite detectar a casi 7 de cada 10 jóvenes interesados, pero con muchas falsas alarmas. Sirve como un primer filtro para ordenar a los jóvenes por probabilidad de interés y decidir dónde orientar recursos, no para decidir sobre una persona. No predice qué carrera estudiará un joven, solo su intención declarada, y no se aplica a los indecisos.
+La regresión logística permite detectar a casi 7 de cada 10 jóvenes interesados, pero con muchas falsas alarmas. Permite identificar perfiles con más probabilidad de interés, para decidir dónde invertir recursos y orientar acciones. No predice qué carrera estudiará un joven, solo su intención declarada, y no se aplica a los indecisos.
 
-**Trabajo futuro:** comparar con otros algoritmos (árbol de decisión, Random Forest), evaluar con validación cruzada completa y definir con quien use el modelo cuántas falsas alarmas se pueden aceptar.
+**Trabajo futuro:** realizar una encuesta periódica a estudiantes de 16 a 18 años de Tierra del Fuego, para ajustar el modelo con datos de la provincia; seguir a esos jóvenes en el tiempo, para comprobar cuántas predicciones se confirman; probar el modelo sin las variables más cercanas al objetivo; compararlo con otros algoritmos (árbol de decisión, Random Forest); evaluar con validación cruzada completa y definir con quien use el modelo cuántas falsas alarmas se pueden aceptar.
 
 ### Aporte del trabajo
 
@@ -207,6 +207,7 @@ El trabajo arma un modelo simple y explicable con datos de encuesta: elige los h
 
 - Muestra online y no probabilística; quedan afuera los indecisos y quienes no piensan seguir estudiando.
 - Predictores y objetivo se respondieron al mismo tiempo: no se sabe si lo declarado coincide con lo que después estudian.
+- Varias variables miden interés en informática y están muy cerca del objetivo; no se probó el modelo sin ellas.
 - Pocos "Sí" en la prueba (72) y una sola partición 80/20: las métricas pueden variar con otra división.
 - Se usan microdatos anonimizados, con reconocimiento de autoría al consorcio IDES-KNAC y fines académicos.
 - El sexo es una variable del modelo. Refleja una diferencia que ya hay en los datos; por eso se propone usarlo solo como apoyo para analizar grupos, nunca para decidir sobre una persona.

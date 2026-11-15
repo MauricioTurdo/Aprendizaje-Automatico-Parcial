@@ -2,6 +2,11 @@
 
 Modelo de regresión logística para predecir si un joven argentino de 16 a 18 años declara que piensa estudiar Informática, Tecnología, Programación o Ciencia de Datos, e identificar qué factores socioeducativos y actitudinales se asocian con ese interés.
 
+**Presentación**
+
+- Video: https://youtu.be/yC1DyJtXebk (archivo: `docs/video_presentacion.mp4`)
+- Informe: `docs/informe_final.md`
+
 ---
 
 ## 1. Objetivo del Proyecto
@@ -38,8 +43,10 @@ El proyecto se organiza bajo la arquitectura estándar de Cookiecutter Data Scie
 │   └── 02_Modelado_regresion_logistica.ipynb  <- Modelo, hiperparámetros, umbral y resultados
 ├── models/                                    <- Modelo entrenado
 │   └── regresion_logistica.joblib
-├── docs/                                      <- Informe del proyecto
-│   └── informe_final.md
+├── docs/                                      <- Informes y video del proyecto
+│   ├── informe_final.md
+│   ├── informe_preliminar_jovenes_stem.md
+│   └── video_presentacion.mp4
 ├── reports/
 │   └── figures/                               <- Gráficos del informe
 ├── .gitignore                                 <- Filtros para omitir archivos temporales
@@ -103,9 +110,11 @@ La matriz de características procesa un total de **$125$ variables predictoras 
 Para garantizar la capacidad de generalización del modelo ante datos no observados, se removieron explícitamente ($101$ columnas en total):
 
 1. **Identificadores y Ponderadores:** `ID`, `POND_SIN_ELEVAR` (reservados exclusivamente para análisis descriptivos ponderados).
-2. **Variables con exceso de nulos:** `P25` (excluida por presentar más del $81\%$ de valores faltantes) y `P21` (más del $65\%$).
-3. **Variables de Intención Simultánea:** Opciones excluyentes de `P13` (distintas de `P13_9`) y variables de postulación o control posterior (`P15a`, `P16`, `P18`), que dependen de la respuesta, evitando alterar la temporalidad predictiva.
-4. **Revisión de variables cercanas al objetivo:** no hay ninguna pregunta que exprese la misma elección que se predice (las demás opciones de `P13` y los motivos ya están excluidos). Las más cercanas son actitudes o experiencia previa en informática: `P3_d` (interés en cursos de programación o robótica), `P5_d` (gusto por Informática), `P8_3_f` (considerar útil Computación / Informática / Tecnología para el futuro laboral), `P11_a` y `P11_d` (talleres de robótica / programación y tutorías de olimpíadas de informática). Se conservan; al quitarlas y volver a entrenar, el ROC-AUC en la prueba baja de $0,85$ a $0,79$, por lo que el modelo no depende solo de ellas. El detalle está en `docs/informe_final.md`.
+2. **Condicionales o de definición poco clara:** `P39` y `P39a` (solo el $2,5\%$ tiene hijos, casi no varían) y `P33b` y `P33c` (su significado no se puede respaldar con el diccionario).
+3. **Variables de Intención Simultánea:** `P12` y las opciones de `P13` (incluida la variable objetivo `P13_9`, que se separa como $y$) y las variables de postulación o control posterior (`P15`, `P16`, `P18`), que dependen de la respuesta, evitando alterar la temporalidad predictiva.
+4. **Revisión de variables cercanas al objetivo:** no hay ninguna pregunta que exprese la misma elección que se predice (las demás opciones de `P13` y los motivos ya están excluidos). Las más cercanas son actitudes o experiencia previa en informática: `P3_d` (interés en cursos de programación o robótica), `P5_d` (gusto por Informática), `P8_3_f` (considerar útil Computación / Informática / Tecnología para el futuro laboral), `P11_a` y `P11_d` (talleres de robótica / programación y tutorías de olimpíadas de informática). Se conservan, pero no se probó el modelo sin ellas, por lo que queda como limitación. El detalle está en `docs/informe_final.md`.
+
+Además, dentro del *Pipeline* se descartan `P25` ($82,4\%$ de valores faltantes) y `P21` ($60,0\%$), que son saltos del cuestionario. Por eso las $127$ columnas de $X$ quedan en $125$ variables de entrada.
 
 > *Nota: La documentación detallada de cada código, escala Likert y valor codificado se encuentra disponible en el archivo complementario [`libro_de_variables_usuaria-_stem.xlsx`](./data/raw/libro_de_variables_usuaria-_stem.xlsx).*
 
@@ -149,10 +158,11 @@ Son asociaciones, no causas. Varias de estas variables miden interés o experien
 
 ## 6. Conclusiones y Limitaciones
 
-La regresión logística detecta a casi $7$ de cada $10$ jóvenes interesados, pero con muchas falsas alarmas. Sirve como un primer filtro para ordenar a los jóvenes por probabilidad de interés, no para decidir sobre una persona, y no se aplica a los indecisos.
+La regresión logística detecta a casi $7$ de cada $10$ jóvenes interesados, pero con muchas falsas alarmas. Permite identificar perfiles con más probabilidad de interés, para decidir dónde invertir recursos y orientar acciones. No predice qué carrera estudiará un joven, solo su intención declarada, y no se aplica a los indecisos.
 
 * Muestra online y no probabilística; quedan afuera los indecisos y quienes no piensan seguir estudiando.
 * Predictores y objetivo se respondieron al mismo tiempo: no se sabe si lo declarado coincide con lo que después estudian.
+* Varias variables miden interés en informática y están muy cerca del objetivo; no se probó el modelo sin ellas.
 * Solo $72$ "Sí" en la prueba y una única partición $80/20$: las métricas pueden variar con otra división.
 
 ---
